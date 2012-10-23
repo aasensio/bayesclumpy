@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {section}{\numberline {2}Uncompressing and compiling \textsc {BayesCLUMPY}}{4}
+\contentsline {section}{\numberline {3}Command Line Usage}{5}
+\contentsline {subsection}{\numberline {3.1}\texttt {chain.cfg}}{5}
+\contentsline {subsection}{\numberline {3.2}Execution}{7}
+\contentsline {subsection}{\numberline {3.3}Output files}{8}
+\contentsline {subsubsection}{\numberline {3.3.1}Standard MCMC}{8}
+\contentsline {subsubsection}{\numberline {3.3.2}MultiNest}{8}
+\contentsline {section}{\numberline {4}Observations}{8}
+\contentsline {section}{\numberline {5}Graphical front-ends}{9}
+\contentsline {subsection}{\numberline {5.1}Inference}{10}
+\contentsline {subsection}{\numberline {5.2}Synthesis}{10}
+\contentsline {section}{\numberline {6}MultiNest License}{10}
