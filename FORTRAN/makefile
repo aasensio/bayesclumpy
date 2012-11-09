@@ -3,13 +3,14 @@
 # Select compiler uncommenting the COMPILER and OPTIONS variables accordingly
 
 # Intel Fortran compiler
-COMPILER = ifort
-OPTIONS = -c -O3
+#COMPILER = ifort
+#OPTIONS = -c -O3
 # DEBUG = -g -traceback -check noarg_temp_created
 
 # GFortran
-#COMPILER = gfortran
-#OPTIONS = -c -frecord-marker=4
+COMPILER = gfortran
+OPTIONS = -c -frecord-marker=4
+#-fbacktrace -g
 
 
 NESTED_LIB = NESTED

@@ -9,27 +9,27 @@ contains
 !-------------------------------------------------------------------
 ! Return the AGN spectrum
 !-------------------------------------------------------------------
-	function agn_shape(lambda)
-	real(kind=KIND_FLOAT) :: lambda(:), agn_shape(size(lambda))
+	subroutine agn_shape(lambda, agn)
+	real(kind=KIND_FLOAT) :: lambda(:), agn(:)
 	real(kind=KIND_FLOAT), parameter :: lambdah = 0.01, lambdau = 0.1, lambdaRJ = 1.0, p = 0.5, cte = 0.2784
 
 		where(lambda <= lambdah)
-			agn_shape = cte * lambda**1.2 / lambdah**1.2
+			agn = cte * lambda**1.2 / lambdah**1.2
 		endwhere
 
 		where(lambda > lambdah .and. lambda <= lambdau)
-			agn_shape = cte
+			agn = cte
 		endwhere
 
 		where(lambda > lambdau .and. lambda <= lambdaRJ)
-			agn_shape = cte * lambda**(-p) / lambdau**(-p)
+			agn = cte * lambda**(-p) / lambdau**(-p)
 		endwhere
 
 		where(lambda > lambdaRJ)
-			agn_shape = cte * lambdaRJ**(-p) / lambdau**(-p) * lambda**(-3) / lambdaRJ**(-3)
+			agn = cte * lambdaRJ**(-p) / lambdau**(-p) * lambda**(-3) / lambdaRJ**(-3)
 		endwhere
 		
-	end function agn_shape
+	end subroutine agn_shape
 
 ! ---------------------------------------------------------
 ! Extinction laws
@@ -569,10 +569,12 @@ subroutine neural_eval(pars, output, include_agn, reddening_law)
 ! type(neural_network_type) :: neural
 integer :: loopnet, j, include_agn, reddening_law
 real(kind=KIND_FLOAT) :: pars(:), output(:), PCA_coeff
-real(kind=KIND_FLOAT), allocatable :: pars_normalized(:)
+real(kind=KIND_FLOAT), allocatable :: pars_normalized(:), agn(:)
 
 	output = 0.0
 	allocate(pars_normalized(neural%net(1)%ninput))
+
+	allocate(agn(size(neural%lambda)))
 	
 ! Normalize input
 	do loopnet = 1, neural%Nnets
@@ -598,7 +600,8 @@ real(kind=KIND_FLOAT), allocatable :: pars_normalized(:)
 
 ! Add the AGN contribution if desired
 	if (include_agn == 1) then
-		output = output + agn_shape(neural%lambda)
+		call agn_shape(neural%lambda, agn)
+		output = output + agn
 	endif
 	
 ! Finally, transform to Jansky
@@ -608,6 +611,7 @@ real(kind=KIND_FLOAT), allocatable :: pars_normalized(:)
 	output = output * extinction_curve(neural%lambda, reddening_law, pars(8))
 				
 	deallocate(pars_normalized)
+	deallocate(agn)
 	
 end subroutine neural_eval
 
@@ -617,40 +621,45 @@ end subroutine neural_eval
 subroutine lininterpol_eval(pars, output, include_agn, reddening_law)
 integer :: loopnet, j, include_agn, reddening_law
 real(kind=KIND_FLOAT) :: pars(:), output(:)
-real(kind=KIND_FLOAT), allocatable :: PCAcoefs(:), dbpars(:)
+real(kind=KIND_FLOAT), allocatable :: PCAcoefs(:), dbpars(:), agn(:)
 
 	allocate(PCAcoefs(database%npca))
 	allocate(dbpars(6))
 
+	allocate(agn(size(neural%lambda)))
+
 ! Rotate Y and sigma, which are not in the same order as in the DB
-	dbpars = pars
+	dbpars = pars(1:6)
 	dbpars(1) = pars(2)
 	dbpars(2) = pars(1)
 
 	output = 0.0
-	
-	call lininterpol_db(dbpars, PCAcoefs)	
-	
+
+	call lininterpol_db(dbpars, PCAcoefs)
+
 	do j = 1, database%npca
 		output = output + PCAcoefs(j) * database%base(j,:)
 	enddo
-
+	
 ! Add the mean spectrum and transform to flux
-	output = 10.e0**(output + database%meanSED)
+	output = 10.e0**(output + database%meanSED)	
 	
 ! Add the AGN contribution if desired
 	if (include_agn == 1) then
-		output = output + agn_shape(database%lambda)
+		call agn_shape(neural%lambda, agn)
+		output = output + agn
 	endif
+
 	
 ! Finally, transform to Jansky
 	output = (database%lambda*1.e-4 / 2.99792458d10) / 1.e-26 * output
 
 ! If extinction is taken into account
 	output = output * extinction_curve(database%lambda, reddening_law, pars(8))
-				
+
 	deallocate(PCAcoefs)
 	deallocate(dbpars)
+	deallocate(agn)
 	
 end subroutine lininterpol_eval
 
