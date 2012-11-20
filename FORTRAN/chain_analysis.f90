@@ -722,7 +722,7 @@ contains
 			action='write',status='replace',form='unformatted')
 			
 ! The two last are the MAP SED and the estimated one
-		write(12) chain_analysis%nlength+2
+		write(12) chain_analysis%nlength+4
 		
 ! Save file with evaluated SEDs at the posterior samples
 		do i = 1, chain_analysis%nlength

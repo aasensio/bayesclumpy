@@ -50,10 +50,11 @@ pro bayesclumpy_Event, event
 				plot_models, 'MARKOVCHAINS/'+state.outfile, state.params, neural, est, errup, errdown, best, state, /print_flux, seds
 
 ; Plot the best fits in POSTCRIPT
-				open_ps,'PLOTS/MAP_'+strtrim(state.agn_name)+'.ps', /color
+				open_ps,'PLOTS/MAP_'+strtrim(clean(state.agn_name))+'.ps', /color
 				plot_observed_SED, state				
 				plot_models, 'MARKOVCHAINS/'+state.outfile, state.params, neural, est, errup, errdown, best, state, seds
 				close_ps
+				print, 'Figure PLOTS/MAP_'+strtrim(clean(state.agn_name))+'.ps created'
 			endif
 		 end
 

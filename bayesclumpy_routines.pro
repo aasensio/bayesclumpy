@@ -539,3 +539,16 @@ function histog, a, nbins=nbins, binsize=binsize, plot=plot, optimbin=optimbin, 
 	endif
 	 	 
 end
+
+; Clean '' from a string
+function clean, str
+	temp = strpos(str,"'")
+	if (temp ne -1) then begin
+		strput,str,' ',temp
+	endif
+	temp = strpos(str,"'")
+	if (temp ne -1) then begin
+		strput,str,' ',temp
+	endif
+	return, strcompress(str, /remove_all)
+end

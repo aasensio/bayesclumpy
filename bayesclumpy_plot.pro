@@ -211,13 +211,14 @@ pro plot_chains, file, param_names, postcript=postscript, type=type, agn_name=ag
 	!p.multi=0
 
 ; Do the same plots in POSTCRIPT files
-	!p.multi = [0,3,3]
-	open_ps,'PLOTS/chains_'+strtrim(agn_name)+'.ps'
+	!p.multi = [0,3,3]	
+	open_ps,'PLOTS/chains_'+strtrim(clean(agn_name))+'.ps'
 	for i = 0, 8 do begin
 		plot, chain[i,*], psym=3, ytit=param_names[i],charsize=1.4
 	endfor
 	!p.multi=0
 	close_ps
+	print, 'PLOTS/chains_'+strtrim(clean(agn_name))+'.ps created'
 
 end
 
@@ -366,7 +367,7 @@ pro plot_marginalized, file, param_names, state, postcript=postscript, agn_name=
 			!p.multi = 0
 
 ; Do the plots in POSTCRIPT
-			open_ps,'PLOTS/marginal_'+strtrim(agn_name)+'.ps'
+			open_ps,'PLOTS/marginal_'+strtrim(clean(agn_name))+'.ps'
 			nparam = 0L
 			openr,2,file+'.hist1D',error=err
 			readf,2,nparam
@@ -393,6 +394,7 @@ pro plot_marginalized, file, param_names, state, postcript=postscript, agn_name=
 			close,2
 			!p.multi = 0
 			close_ps
+			print, 'PLOTS/marginal_'+strtrim(clean(agn_name))+'.ps created'
 		endelse
 		
 ; 	endif
