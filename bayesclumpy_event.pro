@@ -268,7 +268,7 @@ pro bayesclumpy_Event, event
 		 'CALCULATE_COVFACTOR' : begin
 			widget_control, state.plotrightWidget, GET_VALUE=which_window
 			wset, which_window
-			Ltorus_Lagn, 'MARKOVCHAINS/'+state.outfile, state.params, state.distance, agn_name=state.agn_name
+			Ltorus_Lagn, state, 'MARKOVCHAINS/'+state.outfile, state.params, state.distance, agn_name=state.agn_name
 		 end
 
 		 'SUGGEST_OBSERVATION' : begin

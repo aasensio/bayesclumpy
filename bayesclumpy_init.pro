@@ -66,11 +66,11 @@ function bayesclumpy_init, reset_state=reset_state
 	endelse
 	
 	device, get_screen_size=winsize
-	ysiz = 450
+	ysiz = 350
 	if (winsize[1] le 800) then begin
 		ysiz = 300
 	endif
-	xsiz = 650
+	xsiz = 500
 	if (winsize[1] le 800) then begin
 		xsiz = 550
 	endif

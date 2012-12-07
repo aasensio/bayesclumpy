@@ -624,7 +624,7 @@ end
 ;-----------------------------------------
 ; Calculates the ratio Ltorus/Lagn
 ;-----------------------------------------
-pro Ltorus_Lagn, file, param_names, dist, postcript=postscript, agn_name=agn_name
+pro Ltorus_Lagn, state, file, param_names, dist, postcript=postscript, agn_name=agn_name
 	
 ; Read the Markov chains
 	nparam = n_elements(param_names)
@@ -653,6 +653,35 @@ pro Ltorus_Lagn, file, param_names, dist, postcript=postscript, agn_name=agn_nam
 	
 	Fbol = fltarr(nlength)
 	
+	loop = 0
+
+; Read the Markov chain	
+	nparam = n_elements(param_names)
+	openr,2,file+'post_equal_weights.dat',error=err
+	if (err ne 0) then begin
+		res = dialog_message('Error opening posterior samples.'+string(10B)+$
+			'You should run again the inference',/error)
+		return
+	endif else begin
+		nlength = file_lines(file+'post_equal_weights.dat')
+		chain = fltarr(nparam+1,nlength)
+		readf,2,chain
+		logposterior = reform(chain[nparam,*])
+		chain = chain[0:nparam-1,*]
+		close,2
+	endelse
+	
+	seds = fltarr(nlength,n_elements((*state.lambda)))
+		
+	n = 0L
+	openr,2,file+'.SED_samples',/f77
+	readu,2,n
+	temp = fltarr(n_elements((*state.lambda)))
+	for j = 0L, nlength-1 do begin
+		readu,2,temp
+		seds[j,*] = temp
+	endfor
+	
 	progressBar = Obj_New("SHOWPROGRESS", TITLE='Calculating', MESSAGE='Computing covering factor',$
 		XSIZE=200)
    progressBar->Start
@@ -660,11 +689,11 @@ pro Ltorus_Lagn, file, param_names, dist, postcript=postscript, agn_name=agn_nam
 	for i = 0, nlength-1 do begin
 		percent = i / (nlength-1.d0) * 100.d0
       progressBar->Update, percent
-      
-		SED_noAGN = neural_SED(neural, chain[0,i], chain[1,i], chain[2,i], chain[3,i], $
-			chain[4,i], chain[5,i], include_agn=0, /jansky) / 1.d10 * 10.d0^chain[6,i]
+
+     
+		SED_noAGN = seds[i,*]
 	
-		Fbol[i] = tsum(neural.lambda*1.d-4,sed_noagn*3.d10/(neural.lambda*1.d-4)^2) * 1.d-26
+		Fbol[i] = tsum((*state.lambda)*1.d-4,sed_noagn*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 	endfor
 	progressBar->Destroy
    Obj_Destroy, progressBar
@@ -672,6 +701,7 @@ pro Ltorus_Lagn, file, param_names, dist, postcript=postscript, agn_name=agn_nam
 	d = dist * 3.08506d18 * 1.d6
 	lbol = Fbol * 4 * !dpi * d^2
 	
+
 	r = Lbol / Lagn
 	
 	h = histog(r, nbin=40)
