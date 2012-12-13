@@ -167,7 +167,7 @@ pro plot_chains, file, param_names, postcript=postscript, type=type, agn_name=ag
 		openr,2,file+'.chain',/f77,error=err
 		if (err ne 0) then begin
 			res = dialog_message('Error opening posterior samples.'+string(10B)+$
-				'You should run again the inference',/error)			
+				'You should run again the inference',/error)
 			return
 		endif else begin
 			nparam = 0L
@@ -181,7 +181,7 @@ pro plot_chains, file, param_names, postcript=postscript, type=type, agn_name=ag
 			readu,2,logposterior
 			readu,2,acceptance
 			close,2
-		endelse
+		endelse		
 	endif
 
 ; Multinest
@@ -681,6 +681,7 @@ pro Ltorus_Lagn, state, file, param_names, dist, postcript=postscript, agn_name=
 		readu,2,temp
 		seds[j,*] = temp
 	endfor
+	close,2
 	
 	progressBar = Obj_New("SHOWPROGRESS", TITLE='Calculating', MESSAGE='Computing covering factor',$
 		XSIZE=200)

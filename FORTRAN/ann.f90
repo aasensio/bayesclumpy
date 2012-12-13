@@ -626,7 +626,7 @@ real(kind=KIND_FLOAT), allocatable :: PCAcoefs(:), dbpars(:), agn(:)
 	allocate(PCAcoefs(database%npca))
 	allocate(dbpars(6))
 
-	allocate(agn(size(neural%lambda)))
+	allocate(agn(size(database%lambda)))
 
 ! Rotate Y and sigma, which are not in the same order as in the DB
 	dbpars = pars(1:6)
