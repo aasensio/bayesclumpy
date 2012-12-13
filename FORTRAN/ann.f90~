@@ -646,7 +646,7 @@ real(kind=KIND_FLOAT), allocatable :: PCAcoefs(:), dbpars(:), agn(:)
 	
 ! Add the AGN contribution if desired
 	if (include_agn == 1) then
-		call agn_shape(database%lambda, agn)
+		call agn_shape(neural%lambda, agn)
 		output = output + agn
 	endif
 
