@@ -69,13 +69,13 @@ function bayesclumpy_init, reset_state=reset_state
 
 	ysiz = 350
 	if (winsize[1] le 800) then begin
-		ysiz = 300
-		print, 'Using reduced x-size for plotting windows'
+		ysiz = 250
+		print, 'Using reduced y-size for plotting windows'
 	endif
 	xsiz = 500
 	if (winsize[0] le 1200) then begin
 		xsiz = 350
-		print, 'Using reduced y-size for plotting windows'
+		print, 'Using reduced x-size for plotting windows'
 	endif
 	
 	tabs = widget_tab(state.baseWidget, VALUE='tabs',UVALUE='TABS')
