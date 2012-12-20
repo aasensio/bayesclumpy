@@ -128,7 +128,7 @@ pro plot_observed_SED, state
 	cwpal	
 
 	plot, (*state.obs_x), abs((*state.obs_y)), psym=8, /ylog, /xlog, xran=[0.1,100], xsty=1,$
-		tit=state.agn_name, xtit='Wavelength [!7l!6m]',ytit='Flux',yran=[min((*state.obs_y))*0.1,max((*state.obs_y))*10000]
+		tit=state.agn_name, xtit='Wavelength [!7l!6m]',ytit='Flux',yran=[min((*state.obs_y))*0.1,max((*state.obs_y))*10.0]
 ; 	oplot, (*state.obs_x), abs((*state.obs_y)), psym=8, col=5
 
 ; Points with standard gaussian errors
@@ -495,7 +495,7 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 		readu,2,temp
 		seds[j,*] = temp
 	endfor
-		
+	
 ; The four last couple of SEDs are the one of the median parameters and the MAP
 	readu,2,temp
 	SED_median = temp
@@ -566,10 +566,13 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 ; 	SED_MAP = neural_SED(neural, best[0], best[1], best[2], best[3], $
 ; 		best[4], best[5], include_agn=state.agn_plus_sed, /jansky) / 1.d10 * 10.d0^best[6]
 
-; Plot the MAP SED
+
+; Plot the MAP SED without extinction
 	if (state.reddening_law ne 0) then begin
-		oplot, (*state.lambda)*(1.d0+best[8]), SED_MAP_noextinction, thick=3, col=4
+; 		oplot, (*state.lambda)*(1.d0+best[8]), SED_MAP_noextinction, thick=3, col=4
 	endif
+
+; Plot the MAP SED including extinction (if included)
 	oplot, (*state.lambda)*(1.d0+best[8]), SED_MAP, thick=3, col=2
 
 ; Compute the bolometric fluxes

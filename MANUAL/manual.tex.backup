@@ -79,10 +79,10 @@ clumpy dusty torus model of the Kentucky group.}}
 This software is distributed ``as is'' and the authors do not take any responsability for
 possible errors derived from its use by others. Apply it with care and
 never trust the output without a careful meditation. \B\ can be freely used
-provided that its origin is properly acknowledged and the references Asensio Ramos \& 
-Ramos Almeida (2009; ApJ 696, 2075, 2013; MNRAS 428, 195) are cited and acknowledged in any
-publication achieved with it. Before using \B\ we recommend the user to read carefully the
-papers. Please, 
+provided that its origin is properly acknowledged and the reference Asensio Ramos \& 
+Ramos Almeida (2009; ApJ 696, 2075) is cited and acknowledged in any
+publication achieved with it. Before using \B\ we recommend the user to read carefully this
+paper. Please, 
 send us bug reports, comments and suggestions of possible improvements.
 We point out that \B\ will be improved over the years, but it is now ready for a number of
 interesting applications.
@@ -183,29 +183,17 @@ If errors appear when starting the GUI, use \texttt{bayesclumpy,/reset}.
 \subsection{Inference}
 This is the default tab when running the GUI. A snapshot is shown in Fig. \ref{fig:inversion_GUI}.
 It can be used to visually change the
-parameters defined for the inference and execute the inference. The available options are:
+parameters defined for the inference and execute the inference. The available buttons are:
 \begin{itemize}
 \item Select file: opens a dialog box to select the catalog with the observations, as described in Section \ref{sec:observations}.
-\item Plot SED: plots the selected SED for visualization purposes
-\item Plot MAP: plots the observed SED, together with the best fit (MAP), the median and the 1$\sigma$ confidence region.
-\item Plot last inference: plots the Markov chains and the ensuing marginal posteriors
-\item App. covering factor: plots the posterior for the covering factor. Do not forget to enter the distance
- in Mpc because this quantity is used during the calculation
-\item Suggest observation: use the Bayesian decision theory to suggest a new optimal filter (Asensio Ramos \& Ramos Almeida 2012)
-\item Inference: run the Bayesian inference
-\item Prior definition boxes. Allows to select the range of variation for each parameter and the shape of the prior (uniform, Gaussian or
-Dirac). If you use a Dirac prior, enter the value in the ``Central value'' box. If you use a Gaussian prior, enter both the central
-value and the width.
-\item Output file: defines the root for all the output files on the inference. It will be saved in the \texttt{MARKOVCHAINS} directory
-\item Distance: distance in Mpc to the source
-\item Reddening law: select among the possible reddening laws. If other than ``No reddening'' is selected, fill the
-information in the prior definition box for the extinction. We recommend to use extinction when there is an observed
-evidence for it. Selecting a wide range of extinction can lead to multi-modal posteriors.
-\item AGN contribution: use ``SED+AGN'' for AGN with broad lines and ``Only SED'' for Type-2 AGN
-\item Interpolation method: used to select between the neural network interpolation or a multilinear
-interpolation in the full database. In principle, we suggest the linear interpolation.
+\item Plot SED: 
 \end{itemize}
 
+It can
+also be used to draw the observed SED (``Plot SED'' button), the 1D marginal posterior
+distributions obtained in the last inference run (``Plot last inference'' button) and the
+SED plus the maximum-a-posteriori fit with the error bars (``Plot MAP'' button). Finally,
+the ``Inference button'' runs the code.
 
 \begin{figure}[!t]
 \includegraphics[scale=0.5]{snapshot2.png}
@@ -220,54 +208,8 @@ of the SED at each wavelength with respect to any parameter).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Observations}
-\label{sec:observations}
-The observations are usually saved in the \texttt{OBSERVATIONS} directory. For example, the
-file for Circinus reads:
-\begin{verbatim}
-'Circinus'
-8  200
-'nacoJ'         1.60    0.2     
-'F160W'         4.77    0.7     
-'nacoK'         19      1.9     
-'naco2p42'      31      3.1     
-'nacoLp'        380     38      
-'nacoMp'        1900    190     
-'trecsSi2'      5939    297     
-'trecsQa'       14078   3520
-'T-ReCS'
-      7.93260      136.241      20.4361
-      7.95480      145.111      21.7666
-      7.97700      161.525      24.2288
-      7.99920      140.983      21.1475
-      8.02140      133.449      20.0174
-      8.04360      141.806      21.2709
-      8.06580      146.340      21.9510
-......
-\end{verbatim}
-
-Line by line, the file contains:
-\begin{itemize}
-\item The first line defines the name of the galaxy for identification purposes. This
-name is used when generating the plots stored in the \texttt{PLOTS} directory when
-clicking on the ``Plot MAP'' button.
-\item Defines the number of photometric points (first number, 8 in the example) and spectroscopic points (second number, 200 in the example).
-\item Photometric data: each line contains the name of the filter (see file \texttt{FILTERS/normalizations.dat'} for
-a list of available filters), the flux in mJy and the error in mJy.
-\item Name of the instrument for spectroscopy
-\item Spectroscopic data: wavelength in $\mu$m (first column), flux in mJy (second column) and the error in mJy (third column)
-\end{itemize}
-If there is no spectroscopy available, just put 0 in the number of spectroscopic points and leave the photometric information only.
-It is possible to give detection limits by putting the flux in negative (the
-absolute value is used in the code) and giving the confidence (0.68, 0.95, etc.) in the second
-column.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Command Line Usage}
-\B\ is fundamentally controlled via the IDL graphic user interface. We strongly
-recommend the use of the interface. However, if you are brave enough, it is
+\B\ is fundamentally controlled via the IDL graphic user interface. However, it is
 possible to control it to do inference through the command line
 using the input file \texttt{chain.cfg}.
 
@@ -383,85 +325,70 @@ After the \texttt{chain.cfg} file is set, the code is run by invoking
 ./clumpy_mcmc
 \end{verbatim}
 After the code is executed, output files are generated. These files are discussed in the
-next section. While running, the code prints some information about the estimated
-value of the evidence and the number of samples. At the end, a summary of the
-results is also printed:
+next section. Since the inference is done through a Markov Chain Monte Carlo calculation,
+it can suffer from convergence problems. While running, the code prints the average value
+of the parameters, together with the estimated standard deviation. An example of the
+output is given below:
 \begin{scriptsize}
 \begin{verbatim}
-ln(Z):              -20.764838
-Acceptance Rate:      0.275456
-Replacements:             7699
-Total Samples:           27950
-ln(Z):              -20.546586
- ln(ev)=  -20.546585595300542      +/-  0.14854888592743931     
- Total Likelihood Evaluations:        27950
- Sampling finished. Exiting MultiNest
- Length of posterior samples :         2661
- Number of parameters :            9
-sigma : E(x)=  65.9822 - MAP=  69.1687
-1-sigma : -   4.3476  +   2.5574
-2-sigma : -   9.7182  +   3.3246
-Y : E(x)=  55.8599 - MAP=  43.2088
-1-sigma : -  27.8117  +  24.8530
-2-sigma : -  43.1969  +  36.3919
-N : E(x)=  12.1321 - MAP=  10.5982
-1-sigma : -   1.7716  +   1.6503
-2-sigma : -   2.9365  +   2.3783
-q : E(x)=   2.6603 - MAP=   2.8560
-1-sigma : -   0.3334  +   0.2084
-2-sigma : -   0.7346  +   0.2813
-tauv : E(x)=  20.4411 - MAP=  18.7710
-1-sigma : -   2.6045  +   3.0676
-2-sigma : -   4.9776  +   6.3088
-angle : E(x)=  58.3109 - MAP=  79.4059
-1-sigma : -  18.1883  +  18.4340
-2-sigma : -  31.9523  +  26.2992
-shift : E(x)=   1.6600 - MAP=   1.6520
-1-sigma : -   0.0535  +   0.0614
-2-sigma : -   0.1007  +   0.1432
-extinction : E(x)=   2.1245 - MAP=   1.6052
-1-sigma : -   1.3121  +   1.5464
-2-sigma : -   1.9056  +   2.4055
-redshift : E(x)=   0.0010 - MAP=   0.0010
-1-sigma : -   0.0000  +   0.0000
-2-sigma : -   0.0000  +   0.0000
- Evidence, <ln L> and Kullback-Leibler divergence
- -0.20546585      -9.5367174      -9.3312511    
-PLOTS/marginal_Circinus.ps created
-PLOTS/chains_Circinus.ps created
-MAP bolometric flux [erg*cm^-2*s^-1] :    3.9595846e-09
-MAP bolometric flux with extinction [erg*cm^-2*s^-1] :    3.6616562e-09
-Median bolometric flux [erg*cm^-2*s^-1] :    4.4065919e-09
-Median bolometric flux with extinction [erg*cm^-2*s^-1] :    3.9741406e-09
-Figure PLOTS/MAP_Circinus.ps created
+  9600  Acc. rate:   6.51- 25.50% -- (alp,alp/th):     0.026     0.037 -- logL(max):   -0.5590E+02    
+    Avg:     65.4995   41.9076   14.3619    1.2772   35.2157    2.2846    0.1384    0.0612            
+    Sigma:    3.1149   12.3222    0.5093    0.1394   10.2167    1.7097    0.0516    0.6019            
+  9700  Acc. rate:   6.67- 23.50% -- (alp,alp/th):     0.026     0.037 -- logL(max):   -0.5590E+02    
+    Avg:     65.5310   41.9836   14.3495    1.2759   35.1415    2.2872    0.1387    0.0605            
+    Sigma:    3.1143   12.2812    0.5213    0.1393   10.1901    1.7021    0.0514    0.5988            
+  9800  Acc. rate:   6.78- 19.50% -- (alp,alp/th):     0.026     0.037 -- logL(max):   -0.5590E+02    
+    Avg:     65.5597   42.0565   14.3365    1.2740   35.0663    2.2894    0.1390    0.0599            
+    Sigma:    3.1122   12.2396    0.5343    0.1399   10.1651    1.6939    0.0512    0.5958
 \end{verbatim}
 \end{scriptsize}
+A standard way to estimate if the Markov chain is in the good direction is to have
+an local acceptance rate (the second number after \texttt{Acc. rate:}) in the range 20-30\%.
+Another good feeling can be obtained from the value of the logarithm of the posterior (\texttt{logL(max)}).
+If this number (normalized to the number of points) is of the order of 1, the Markov chain has
+located the regions of high probability and good results should be expected. In case this does
+not occur, stop the run and re-run it until the previous conditions are fulfilled.
 
+It is possible to use IDL to quickly synthesize SEDs. For this, enter IDL and do:
+\begin{verbatim}
+IDL> .r bayesclumpy
+IDL> restore,'neural.idl'
+IDL> sed = neural_SED(neural, sigma, Y, N, q, tauv, angle, $
+     include_agn=include_agn, jansky=jansky, out_agn = out_agn)
+\end{verbatim}
+\texttt{sigma, Y, N, q, tauv, angle} are the parameters of the clumpy torus model. It returns
+the SED that you can plot vs. wavelength with:
+\begin{verbatim}
+IDL> plot, neural.lambda, sed
+\end{verbatim}
+The \texttt{include\_agn} parameter is used to include the AGN emission. The \texttt{jansky} flag is 
+used to make the output be returned in Jy and \texttt{out\_agn} can be used to return from
+the function the AGN spectrum.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Output files}
 \label{sec:output}
 
 \subsubsection{Standard MCMC}
-Every run of the \B\ code generates several files with different extensions. The root
-of each file is the one selected in the ``Output file'' box in the GUI or in the 
-\texttt{chain.cfg} file. Of all the files generated, the following are the most interesting:
+Every run of the \B\ code generates three files with different extensions. The root
+of each file is the one selected in the \texttt{chain.cfg} file and the following
+extensions are added:
 \begin{itemize}
+ \item \texttt{.chain}: this is a binary file that contains the Markov chain for all the parameters.
+ \item \texttt{.hist1D}: this is a binary file that contains the one-dimensional marginal histograms
+   for each parameter.
  \item \texttt{.confidence}: this is a text file that contains information on the retrieved parameters.
  Each line contains the estimated marginal median value, together with the confidence interval at 68\%
  and 95\% confidence, with the lower limit before the upper limit. The last line contains the set of
  parameters that produce the largest value of the full posterior distribution (if all the parameters
  have a uniform prior, this set of parameters coincides with the ones retrieved with a standard 
- least-squares minimization)
- \item \texttt{.hist1D}: this is an ASCII file that contains the marginal posteriors for all the parameters. The 
- file \texttt{read\_marginal.pro} is an example of how to read it
- \item \texttt{.MAP}: contains the values of the parameters that give the largest posterior. This is equivalent to
- the least-squares solution (modified by the presence of the priors)
- \item \texttt{.post\_equal\_weights.dat}: this is an ASCII file containing all the samples from the posterior. The file
- \texttt{read\_samples.pro} shows how to read it
- \item \texttt{.SED\_samples}: contains the SEDs that correspond to the samples of the posteriors. The file \texttt{read\_seds.pro}
- shows how to read this file
+ least-squares minimization).
 \end{itemize}
+
+The IDL program \texttt{readchain.pro} can be used to read the full output. Just invoke it
+with \texttt{readchain, 'test'} and it generates the variable \texttt{chains} with the Markov chains,
+together with some summarize information about the parameters. It also plots the 1D marginal histograms
+for each variable.
 
 \subsubsection{MultiNest}
 An additional set of files is generated if MultiNest inference is carried out. The Markov chains
@@ -470,6 +397,32 @@ is saved in the file with the extension \texttt{stats.dat}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Observations}
+\label{sec:observations}
+The observations are usually saved in the \texttt{OBSERVATIONS} directory. The structure
+of the file is as follows:
+
+\begin{verbatim}
+'NGC XXXX'
+\end{verbatim}
+Name of the galaxy for identification purposes.
+
+\begin{verbatim}
+3
+\end{verbatim}
+Number of points of the SED in filter photometry.
+
+\begin{verbatim}
+'F160W'         flux1    error1
+'trecsN'        flux2    error2
+'trecsQa'       flux3    error3
+\end{verbatim}
+Data for the photometry. Each line indicates a filter (see file \texttt{FILTERS/normalizations.dat'} for
+a list of available filters), the flux in mJy and the error as the 68\% confidence interval
+assumed symmetric. It is possible to give detection limits by putting the flux in negative (the
+absolute value is used in the code) and giving the confidence (0.68, 0.95, etc.) in the second
+column.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

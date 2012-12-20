@@ -553,23 +553,24 @@ function bayesclumpy_init, reset_state=reset_state
    endcase
 
 ; Widget jujutsu to create fancy label frames.
-   IF !VERSION.OS_FAMILY EQ 'WINDOWS' THEN fancyFont = 'Times*16*Italic*Bold'
-   bulletinBoardBase = Widget_Base(mcmcBase2)
-   thisLabel = ' Phot+spec '
-   label = Widget_Label(bulletinBoardBase, VALUE=thisLabel, XOFFSET=5, FONT=fancyFont)
-   labelGeometry = Widget_Info(label, /GEOMETRY)
-   labelYSize =  labelGeometry.ysize
-   agnBase = Widget_Base(bulletinBoardBase, COLUMN=1, /FRAME, $
-        YOFFSET=labelYSize/2, YPAD=10, XPAD=10, /EXCLUSIVE)
-   label = Widget_Label(bulletinBoardBase, VALUE=thisLabel, XOFFSET=5, FONT=fancyFont)
+;    IF !VERSION.OS_FAMILY EQ 'WINDOWS' THEN fancyFont = 'Times*16*Italic*Bold'
+;    bulletinBoardBase = Widget_Base(mcmcBase2)
+;    thisLabel = ' Phot+spec '
+;    label = Widget_Label(bulletinBoardBase, VALUE=thisLabel, XOFFSET=5, FONT=fancyFont)
+;    labelGeometry = Widget_Info(label, /GEOMETRY)
+;    labelYSize =  labelGeometry.ysize
+;    agnBase = Widget_Base(bulletinBoardBase, COLUMN=1, /FRAME, $
+;         YOFFSET=labelYSize/2, YPAD=10, XPAD=10, /EXCLUSIVE)
+;    label = Widget_Label(bulletinBoardBase, VALUE=thisLabel, XOFFSET=5, FONT=fancyFont)
 ; Widget jujutsu to create fancy label frames.
 
-   stdButton = widget_button(agnBase, VALUE='Standard', UVALUE='PHOTSPEC_STD')
-   mnestButton = widget_button(agnBase, VALUE='Bayesian avg.', UVALUE='PHOTSPEC_BAY')
-   case (state.avg_method) of
-   	0 : widget_control, stdButton, /SET_BUTTON
-   	1 : widget_control, mnestButton, /SET_BUTTON
-   endcase
+; HOW TO WEIGHT SPECTROSCOPY******************** OFF FOR THE MOMENT
+;    stdButton = widget_button(agnBase, VALUE='Standard', UVALUE='PHOTSPEC_STD')
+;    mnestButton = widget_button(agnBase, VALUE='Bayesian avg.', UVALUE='PHOTSPEC_BAY')
+;    case (state.avg_method) of
+;    	0 : widget_control, stdButton, /SET_BUTTON
+;    	1 : widget_control, mnestButton, /SET_BUTTON
+;    endcase
    
 mcmcBase2 = widget_base(mcmcBase, /ROW)
 	
