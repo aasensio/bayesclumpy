@@ -32,16 +32,12 @@ function bayesclumpy_init, reset_state=reset_state
 		restore,'state.idl'
 	endelse
 
-	slider_xsize = 110
-
 	list_reddenings = ['No reddening','Allen (1976)','Seaton (1979) MW',$
 		'Fitzpatrick (1986) LMC',$
 		'Pr�vot et al. (1984) SMC','Calzetti et al. (2000) SB','Chiar & Tielens (2000)']
 
  	symbo = findgen(17) * (!pi*2/16.)
 	usersym, cos(symbo), sin(symbo), /fill
-
-	state.baseWidget = widget_base(TITLE=version)
 
 ; If not initialized...
 	if (total(abs(state.ranges_from)) eq 0) then begin
@@ -67,16 +63,27 @@ function bayesclumpy_init, reset_state=reset_state
 	
 	device, get_screen_size=winsize
 
-	ysiz = 350
+	slider_xsize = 110
+	
+	winsize = [1200,800]
+	ysiz_plot = 350
+	ysiz = 790
 	if (winsize[1] le 800) then begin
-		ysiz = 300
+		ysiz_plot = 250
+		ysiz = 690		
 		print, 'Using reduced y-size for plotting windows'
 	endif
-	xsiz = 500
+	
+	xsiz_plot = 500
+	xsiz = 1300
 	if (winsize[0] le 1200) then begin
-		xsiz = 350
+		xsiz_plot = 350
+		xsiz = 1200
+		slider_xsize = 90
 		print, 'Using reduced x-size for plotting windows'
 	endif
+
+	state.baseWidget = widget_base(TITLE=version, XSIZE=xsiz, YSIZE=ysiz)
 	
 	tabs = widget_tab(state.baseWidget, VALUE='tabs',UVALUE='TABS')
 	
@@ -89,7 +96,7 @@ function bayesclumpy_init, reset_state=reset_state
 
 ; Plotting windows
 	horizplotBase = widget_base(tab1, /ROW)
-	state.plotSEDWidget = widget_draw(horizplotBase, XSIZE=xsiz, YSIZE=ysiz, /FRAME)
+	state.plotSEDWidget = widget_draw(horizplotBase, XSIZE=xsiz_plot, YSIZE=ysiz_plot, /FRAME)
 
 ; Parameters
 	horizparamBase = widget_base(tab1, /COLUMN)
@@ -228,8 +235,8 @@ function bayesclumpy_init, reset_state=reset_state
 
 ; Plotting windows
 	horizplotBase = widget_base(bayesclumpyBase, /ROW)
-	state.plotleftWidget = widget_draw(horizplotBase, XSIZE=xsiz, YSIZE=ysiz, /FRAME)
-	state.plotrightWidget = widget_draw(horizplotBase, XSIZE=xsiz, YSIZE=ysiz, /FRAME)
+	state.plotleftWidget = widget_draw(horizplotBase, XSIZE=xsiz_plot, YSIZE=ysiz_plot, /FRAME)
+	state.plotrightWidget = widget_draw(horizplotBase, XSIZE=xsiz_plot, YSIZE=ysiz_plot, /FRAME)
 
 ; Parameters
 	horizparamBase = widget_base(bayesclumpyBase, /ROW)
