@@ -614,14 +614,12 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 	oplot, (*state.lambda)*(1.d0+est[8]), top, line=2, thick=3
 	oplot, (*state.lambda)*(1.d0+est[8]), bot, line=2, thick=3
 
-	if (keyword_set(calcseds)) then begin
-		openw,2,file+'.synthesis',width=132
-		printf,2,'   Wavelength        MAP           Median       Lower_bound     Upper_bound'
-		for i = 0, n_elements((*state.lambda))-1 do begin
-			printf,2,(*state.lambda)[i], SED_MAP[i], SED_median[i], bot[i], top[i]
-		endfor
-		close,2
-	endif
+	openw,2,file+'.synthesis',width=132
+	printf,2,'   Wavelength        MAP           Median       Lower_bound     Upper_bound'
+	for i = 0, n_elements((*state.lambda))-1 do begin
+		printf,2,(*state.lambda)[i], SED_MAP[i], SED_median[i], bot[i], top[i]
+	endfor
+	close,2
 end
 
 ;-----------------------------------------
