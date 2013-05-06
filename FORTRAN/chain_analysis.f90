@@ -387,7 +387,7 @@ contains
 	integer :: which, spectroscopy_from, spectroscopy_to
 	
 ! Read list of filters
-		open(unit=12, file='FILTERS/normalizations.dat',action='read',status='old')
+		open(unit=12, file='FILTERS/filters_eu.dat',action='read',status='old')
 		read(12,*) Ntot_filters
 		allocate(filter_names(Ntot_filters))
 		
