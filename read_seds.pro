@@ -25,13 +25,13 @@ pro read_sed_samples, file, lambda, seds, SED_median=SED_median, SED_noextinctio
 	endif
 	
 	n = 0L
-	openr,2,file+'.SED_samples',/f77
+	openr,2,file+'.SED_samples';,/f77
 	readu,2,n
 	n = n - 4
 	temp = fltarr(nlam)
-	seds = fltarr(n,nlam)
-	for j = 0L, n-1 do begin
-		readu,2,temp
+	seds = dblarr(n,nlam)
+	for j = 0L, n-1 do begin		
+		readu,2,temp		
 		seds[j,*] = temp
 	endfor
 

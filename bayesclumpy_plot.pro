@@ -164,7 +164,7 @@ pro plot_chains, file, param_names, postcript=postscript, type=type, agn_name=ag
 ; Standard Markov chains
 	if (type eq 0) then begin
 ; Read the Markov chains
-		openr,2,file+'.chain',/f77,error=err
+		openr,2,file+'.chain',error=err;,/f77
 		if (err ne 0) then begin
 			res = dialog_message('Error opening posterior samples.'+string(10B)+$
 				'You should run again the inference',/error)
@@ -488,7 +488,7 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 	seds = fltarr(nlength,n_elements((*state.lambda)))
 		
 	n = 0L
-	openr,2,file+'.SED_samples',/f77
+	openr,2,file+'.SED_samples';,/f77
 	readu,2,n
 	temp = fltarr(n_elements((*state.lambda)))
 	for j = 0L, nlength-1 do begin

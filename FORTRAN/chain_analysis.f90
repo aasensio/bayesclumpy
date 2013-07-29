@@ -311,7 +311,7 @@ contains
 
 ! Save chain to a file
 		open(unit=12,file=trim(adjustl(chain_analysis%filename))//'.chain',&
-			action='write',status='replace',	form='unformatted')
+			action='write',status='replace',	access='stream')
 		write(12) chain_analysis%nparam, chain_analysis%niter_max
 		write(12) chain_analysis%chain
 		write(12) chain_analysis%posterior
@@ -320,8 +320,7 @@ contains
 
 ! Save also marginalized posterior distributions
 		open(unit=12,file=trim(adjustl(chain_analysis%filename))//'.hist1D',&
-			action='write',status='replace',&
-			form='unformatted')
+			action='write',status='replace',	access='stream')
 		write(12) chain_analysis%nparam
 
 ! And confidence intervals
@@ -719,7 +718,7 @@ contains
 		close(13)
 		
 		open(unit=12,file=trim(adjustl(chain_analysis%filename))//'.SED_samples',&
-			action='write',status='replace',form='unformatted')
+			action='write',status='replace',access='stream')
 			
 ! The two last are the MAP SED and the estimated one
 		write(12) chain_analysis%nlength+4

@@ -45,7 +45,7 @@ integer :: nargs
 			call mcmc(chain, prior, 1, chain%niter_max, .TRUE.)
 			call analyze_chains(chain, prior)
 		case(2)
- 			call do_multinest(chain, prior, 1, chain%niter_max, .TRUE.)
+!  			call do_multinest(chain, prior, 1, chain%niter_max, .TRUE.)
  			call analyze_chains_multinest(chain, prior, .FALSE.)
  		case(3)
  			call analyze_chains_multinest(chain, prior, .TRUE.)
