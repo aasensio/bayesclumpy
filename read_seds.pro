@@ -1,3 +1,10 @@
+; Return the perc percetile of an array
+function percentile, data, perc
+	sidx = sort(data)
+	ndata = n_elements(data)
+	return, data[sidx[perc*ndata / 100]]
+end
+
 ; Read SEDs obtained from samples of the MCMC
 ; It returns the samples in "seds", optionally returning the
 ; median and the MAP SEDs
@@ -5,7 +12,8 @@
 pro read_sed_samples, file, lambda, seds, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
 	SED_noagn_median=SED_noagn_median, SED_noagn_noextinction_median=SED_noagn_noextinction_median,$
 	SED_MAP=SED_MAP, SED_noextinction_MAP=SED_noextinction_MAP,$
-	SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP, neural=neural, linear=linear
+	SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP, neural=neural, linear=linear,$
+	oneSigmaUp=oneSigmaUp, oneSigmaDown=oneSigmaDown
 
 	if (n_elements(neural)+n_elements(linear) eq 0) then begin
 		print, 'You have to select which interpolation method you used (/linear or /neural in the call to read_sed_samples)'
@@ -53,6 +61,14 @@ pro read_sed_samples, file, lambda, seds, SED_median=SED_median, SED_noextinctio
 	SED_noagn_MAP = temp
 	readu,2,temp
 	SED_noagn_noextinction_MAP = temp
+	
+	oneSigmaUp = fltarr(nlam)
+	oneSigmaDown = fltarr(nlam)
+	
+	for i = 0, nlam-1 do begin
+ 		oneSigmaUp[i] = percentile(seds[*,i], 50+68.d0/2.d0)
+ 		oneSigmaDown[i] = percentile(seds[*,i], 50-68.d0/2.d0)
+	endfor
 
 	close,2
 
@@ -69,7 +85,7 @@ pro test_read_sed_samples
 	read_sed_samples, 'MARKOVCHAINS/circinus', l, seds, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
 		SED_noagn_median=SED_noagn_median, SED_noagn_noextinction_median=SED_noagn_noextinction_median,$
 		SED_MAP=SED_MAP, SED_noextinction_MAP=SED_noextinction_MAP,$
-		SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP, /linear
+		SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP, oneSigmaUp=oneSigmaUp, oneSigmaDown=oneSigmaDown, /linear
 
 	nseds = n_elements(seds[*,0])
 	plot, l, seds[0,*], /nodata, /xlog, /ylog, xran=[0.1,100]
@@ -79,6 +95,9 @@ pro test_read_sed_samples
 
 	oplot, l, SED_median, col=2, thick=3
 	oplot, l, SED_MAP, col=3, thick=3
+	
+	oplot, l, oneSigmaUp, col=4
+	oplot, l, oneSigmaDown, col=4
 
 	stop
 end
