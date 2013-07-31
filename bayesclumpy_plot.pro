@@ -488,7 +488,7 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 	seds = fltarr(nlength,n_elements((*state.lambda)))
 		
 	n = 0L
-	openr,2,file+'.SED_samples';,/f77
+	openr,2,file+'.SED_samples'
 	readu,2,n
 	temp = fltarr(n_elements((*state.lambda)))
 	for j = 0L, nlength-1 do begin
@@ -675,7 +675,7 @@ pro Ltorus_Lagn, state, file, param_names, dist, postcript=postscript, agn_name=
 	seds = fltarr(nlength,n_elements((*state.lambda)))
 		
 	n = 0L
-	openr,2,file+'.SED_samples',/f77
+	openr,2,file+'.SED_samples'
 	readu,2,n
 	temp = fltarr(n_elements((*state.lambda)))
 	for j = 0L, nlength-1 do begin
