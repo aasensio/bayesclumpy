@@ -12,14 +12,14 @@ contains
 		read(15,*) detect_version
 		close(15)
 		if (detect_version < 0) then
-			write(*,FMT='(A,F3.1,A1)') ' BayesClumpy v', abs(detect_version), 's'
+			write(*,FMT='(A,F4.1,A1)') ' BayesClumpy v', abs(detect_version), 's'
 		else
-			write(*,FMT='(A,F3.1)') ' BayesClumpy v', abs(detect_version)
+			write(*,FMT='(A,F4.1)') ' BayesClumpy v', abs(detect_version)
 		endif
 		return
 		
 101   detect_version = 2.0
-		write(*,FMT='(A,F3.1)') ' BayesClumpy v', abs(detect_version)		
+		write(*,FMT='(A,F4.1)') ' BayesClumpy v', abs(detect_version)		
 		
 	end function detect_version
 

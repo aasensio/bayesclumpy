@@ -9,7 +9,7 @@ end
 ; It returns the samples in "seds", optionally returning the
 ; median and the MAP SEDs
 ; You have to select which method you used for interpolation (LINEAR/NEURAL)
-pro read_sed_samples, file, lambda, seds, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
+pro read_sed_samples, file, lambda, seds, seds_noAGN=seds_noAGN, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
 	SED_noagn_median=SED_noagn_median, SED_noagn_noextinction_median=SED_noagn_noextinction_median,$
 	SED_MAP=SED_MAP, SED_noextinction_MAP=SED_noextinction_MAP,$
 	SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP,$
@@ -25,9 +25,15 @@ pro read_sed_samples, file, lambda, seds, SED_median=SED_median, SED_noextinctio
 	n = n - 4
 	temp = fltarr(nlam)
 	seds = dblarr(n,nlam)
-	for j = 0L, n-1 do begin		
+	seds_noAGN = dblarr(n,nlam)
+	for j = 0L, n-1 do begin
 		readu,2,temp		
 		seds[j,*] = temp
+	endfor
+	
+	for j = 0L, n-1 do begin
+		readu,2,temp		
+		seds_noAGN[j,*] = temp
 	endfor
 
 ; The four last couple of SEDs are the one of the median parameters and the MAP
