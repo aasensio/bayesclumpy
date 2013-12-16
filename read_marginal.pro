@@ -30,6 +30,7 @@ pro read_marginal, file
 	loop = 0L
 	n = 0L
 	!p.multi = [0,3,3]
+	mode = est*0.d0
 	for i = 0, 8 do begin
 		readf,2,loop,n
 		x = fltarr(n)
@@ -45,6 +46,15 @@ pro read_marginal, file
 		verx, map[i], line=1
 		verx, est[i]-errdown[i], line=2
 		verx, est[i]+errup[i], line=2
+		
+; Compute the mode of the histogram using a parabolic fit to the maximum to get sub-pixel precision
+		maximum = max(yStep, maxLoc)
+		left = maxLoc - 2
+		if (left lt 0) then left = 0
+		right = maxLoc + 2
+		if (right gt n_elements(yStep)) then right = n_elements(yStep)-1
+		res = poly_fit(x[left:right], yStep[left:right], 2)
+		mode[i] = -res[1] / (2.d0*res[2])
 	endfor
 	close,2
 	!p.multi = 0
