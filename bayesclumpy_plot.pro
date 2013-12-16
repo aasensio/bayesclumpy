@@ -724,7 +724,7 @@ pro Ltorus_Lagn, state, file, param_names, dist, postcript=postscript, agn_name=
 	h = histog(f2, nbin=40)
 	
 	plot, h[*,0], h[*,1] / max(h[*,1]), xtit='Total covering factor', ytit='Normalized posterior', psym=10
-	perc = percentile(r, [50.d0 - 50.d0*erf(1.d0/sqrt(2.d0)), 50.d0, 50.d0 + 50.d0*erf(1.d0/sqrt(2.d0))])
+	perc = percentile(f2, [50.d0 - 50.d0*erf(1.d0/sqrt(2.d0)), 50.d0, 50.d0 + 50.d0*erf(1.d0/sqrt(2.d0))])
 	verx, perc[0], line=1
 	verx, perc[1], line=0
 	verx, perc[2], line=1
