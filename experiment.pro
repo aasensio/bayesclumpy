@@ -102,15 +102,17 @@ pro read_sed_samples, file, lambda, seds
 
 	seds = fltarr(nlength,n_elements(lambda))
 
-	n = 0L
-	openr,2,file+'.SED_samples',/f77
-	readu,2,n
-	temp = fltarr(n_elements(lambda))
-	for j = 0L, nlength-1 do begin
-		readu,2,temp
-		seds[j,*] = temp
-	endfor
-	close,2
+	read_sed_samples, file, lambda, seds
+	
+; 	n = 0L
+; 	openr,2,file+'.SED_samples',/f77
+; 	readu,2,n
+; 	temp = fltarr(n_elements(lambda))
+; 	for j = 0L, nlength-1 do begin
+; 		readu,2,temp
+; 		seds[j,*] = temp
+; 	endfor
+; 	close,2
 
 ; Select only a subsample of 200 from it
 	ind = randperm(nlength)

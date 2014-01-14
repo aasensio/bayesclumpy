@@ -5,6 +5,7 @@
 @bayesclumpy_event
 @bayesclumpy_experiment
 @showprogress__define
+@read_seds
 
 ;-----------------------------------------
 ; Main routine

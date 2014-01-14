@@ -485,37 +485,47 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 		close,2
 	endelse
 	
-	seds = fltarr(nlength,n_elements((*state.lambda)))
-		
-	n = 0L
-	openr,2,file+'.SED_samples'
-	readu,2,n
-	temp = fltarr(n_elements((*state.lambda)))
-	for j = 0L, nlength-1 do begin
-		readu,2,temp
-		seds[j,*] = temp
-	endfor
+	read_sed_samples, file, lambda, seds, seds_noAGN=seds_noAGN, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
+		SED_noagn_median=SED_noagn_median, SED_noagn_noextinction_median=SED_noagn_noextinction_median,$
+		SED_MAP=SED_MAP, SED_noextinction_MAP=SED_noextinction_MAP,$
+		SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP,$
+		oneSigmaUp=oneSigmaUp, oneSigmaDown=oneSigmaDown
 	
-; The four last couple of SEDs are the one of the median parameters and the MAP
-	readu,2,temp
-	SED_median = temp
-	readu,2,temp
-	SED_median_noextinction = temp
-	readu,2,temp
-	SED_median_noagn = temp
-	readu,2,temp
-	SED_median_noagn_noextinction = temp
-		
-	readu,2,temp
-	SED_MAP = temp
-	readu,2,temp
-	SED_MAP_noextinction = temp
-	readu,2,temp
-	SED_MAP_noagn = temp
-	readu,2,temp
-	SED_MAP_noagn_noextinction = temp
-		
-	close,2
+; 	seds = fltarr(nlength,n_elements((*state.lambda)))
+; 		
+; 	n = 0L
+; 	openr,2,file+'.SED_samples'
+; 	readu,2,n
+; 	temp = fltarr(n_elements((*state.lambda)))
+; 	for j = 0L, nlength-1 do begin
+; 		readu,2,temp
+; 		seds[j,*] = temp
+; 	endfor
+; 	
+; 	for j = 0L, nlength-1 do begin
+; 		readu,2,temp		
+; 	endfor
+; 	
+; ; The four last couple of SEDs are the one of the median parameters and the MAP
+; 	readu,2,temp
+; 	SED_median = temp
+; 	readu,2,temp
+; 	SED_median_noextinction = temp
+; 	readu,2,temp
+; 	SED_median_noagn = temp
+; 	readu,2,temp
+; 	SED_median_noagn_noextinction = temp
+; 		
+; 	readu,2,temp
+; 	SED_MAP = temp
+; 	readu,2,temp
+; 	SED_MAP_noextinction = temp
+; 	readu,2,temp
+; 	SED_MAP_noagn = temp
+; 	readu,2,temp
+; 	SED_MAP_noagn_noextinction = temp
+; 		
+; 	close,2
 	
 ; 	if (keyword_set(calcseds)) then begin
 ; 		seds = fltarr(nlength,n_elements(neural.lambda))
@@ -576,28 +586,28 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 	oplot, (*state.lambda)*(1.d0+best[8]), SED_MAP, thick=3, col=2
 
 ; Compute the bolometric fluxes
-	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_MAP_noextinction*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noextinction_MAP*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 	if (keyword_set(print_flux)) then print, 'MAP bolometric flux [erg*cm^-2*s^-1] : ', SED_Fbol
 	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_MAP*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 	if (keyword_set(print_flux)) then print, 'MAP bolometric flux with extinction [erg*cm^-2*s^-1] : ', SED_Fbol
 
 	if (state.agn_plus_sed eq 1) then begin
-		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_MAP_noagn_noextinction*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noagn_noextinction_MAP*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 		if (keyword_set(print_flux)) then print, 'MAP bolometric flux [erg*cm^-2*s^-1] (without AGN): ', SED_Fbol
- 		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_MAP_noagn*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+ 		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noagn_MAP*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
  		if (keyword_set(print_flux)) then print, 'MAP bolometric flux with extinction [erg*cm^-2*s^-1] (without AGN): ', SED_Fbol
 	endif
 
 ; Compute the bolometric fluxes
-	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_median_noextinction*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noextinction_median*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 	if (keyword_set(print_flux)) then print, 'Median bolometric flux [erg*cm^-2*s^-1] : ', SED_Fbol
 	SED_Fbol = tsum((*state.lambda)*1.d-4,SED_median*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 	if (keyword_set(print_flux)) then print, 'Median bolometric flux with extinction [erg*cm^-2*s^-1] : ', SED_Fbol
 
 	if (state.agn_plus_sed eq 1) then begin
-		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_median_noagn_noextinction*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noagn_noextinction_median*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
 		if (keyword_set(print_flux)) then print, 'Median bolometric flux [erg*cm^-2*s^-1] (without AGN): ', SED_Fbol
- 		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_median_noagn*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
+ 		SED_Fbol = tsum((*state.lambda)*1.d-4,SED_noagn_median*3.d10/((*state.lambda)*1.d-4)^2) * 1.d-26
  		if (keyword_set(print_flux)) then print, 'Median bolometric flux with extinction [erg*cm^-2*s^-1] (without AGN): ', SED_Fbol
 	endif
 	
