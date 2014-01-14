@@ -96,7 +96,7 @@ pro read_eu, file, filt_name, lambda, information, xtit
 
 end
 
-pro read_sed_samples, file, lambda, seds
+pro readSedSamples, file, lambda, seds
 
 	nlength = file_lines(file+'post_equal_weights.dat')
 
@@ -186,7 +186,7 @@ pro runall
    	 experiment_doinference, file, k
 
 ; Read the outputs
-		read_sed_samples, 'MARKOVCHAINS/NEXTFILTER/'+file+'_'+strtrim(string(k),2), database.lambda, seds
+		readSedSamples, 'MARKOVCHAINS/NEXTFILTER/'+file+'_'+strtrim(string(k),2), database.lambda, seds
 		read_sed, 'OBSERVATIONS/NEXTFILTER/'+file+'_'+strtrim(string(k),2)+'.cat', lambda_sed, filt, flux, error
 
 ; Plot the SEDs and the expected utility
@@ -295,7 +295,7 @@ pro analyze_all, postcript=postcript
 
 	for k = 1, nf do begin
 	
-		read_sed_samples, 'MARKOVCHAINS/NEXTFILTER/'+file+'_'+strtrim(string(k),2), database.lambda, seds
+		readSedSamples, 'MARKOVCHAINS/NEXTFILTER/'+file+'_'+strtrim(string(k),2), database.lambda, seds
 		read_sed, 'OBSERVATIONS/NEXTFILTER/'+file+'_'+strtrim(string(k),2)+'.cat', lambda_sed, filt, flux, error
 
 		xtit = ''
