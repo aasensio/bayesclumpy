@@ -134,7 +134,7 @@ pro plot_observed_SED, state
 ; Points with standard gaussian errors
 	ind = where((*state.obs_y) gt 0)
 	if (ind[0] ne -1) then begin
-		errplot, (*state.obs_x)[ind], (*state.obs_y)[ind]-(*state.obs_sigma)[ind], $
+		myerrplot, (*state.obs_x)[ind], (*state.obs_y)[ind]-(*state.obs_sigma)[ind], $
 			(*state.obs_y)[ind]+(*state.obs_sigma)[ind];, col=5
 	endif
 
@@ -819,7 +819,7 @@ pro plot_model_database, state
 		read_observations, state.obsfile, state
 		cwpal
 		oplot, (*state.obs_x), (*state.obs_y), col=2, psym=8
-		errplot, (*state.obs_x), (*state.obs_y)-(*state.obs_sigma), (*state.obs_y)+(*state.obs_sigma)
+		myerrplot, (*state.obs_x), (*state.obs_y)-(*state.obs_sigma), (*state.obs_y)+(*state.obs_sigma)
 
 		chi2 = total( ((*state.obs_y) - res)^2 / (*state.obs_sigma)^2)
 		logL = -0.5 * chi2

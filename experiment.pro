@@ -1,3 +1,4 @@
+@bayesclumpy_routines
 ; Run the inference for a given galaxy
 pro experiment_doinference, file, nobs
 
@@ -307,7 +308,7 @@ pro analyze_all, postcript=postcript
 		plot, lambda_sed, flux / normaliz, psym=8, /ylog, /xlog, xran=[0.7,999.99], xsty=1, charsize=1.5, yran=[1.d-4,99.99], ysty=1,/nodata,xtit=xtit
 		for i = 0, n_elements(seds[*,0])-1 do oplot, database.lambda, seds[i,*] / normaliz, col=150
 		oplot, lambda_sed, flux / normaliz, psym=8
-		errplot, lambda_sed, (flux-error) / normaliz, (flux+error) / normaliz, thick=3
+		myerrplot, lambda_sed, (flux-error) / normaliz, (flux+error) / normaliz, thick=3
 
 		multiplot2
 

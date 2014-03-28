@@ -1,4 +1,6 @@
 @bayesclumpy_ann
+@bayesclumpy_routines
+
 ; Return the perc percetile of an array
 function percentile, data, perc
 	sidx = sort(data)
@@ -141,7 +143,7 @@ pro test_read_sed_samples
 		
 	ind = where(flux gt 0)
 	if (ind[0] ne -1) then begin
-		errplot, x[ind], flux[ind]-error[ind], flux[ind]+error[ind];, col=5
+		myerrplot, x[ind], flux[ind]-error[ind], flux[ind]+error[ind];, col=5
 	endif
 
 ; Points with upper limits
