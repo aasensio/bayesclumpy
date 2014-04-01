@@ -140,10 +140,10 @@ pro bayesclumpy_Event, event
 				res = file_test('clumpy_mcmc')
 				if (res eq 1) then begin
 					spawn,'./clumpy_mcmc'
-; Re-run until sampling is correct
-					while (verify_finished() eq 0) do begin
-						spawn,'./clumpy_mcmc'
-					endwhile
+; Re-run until sampling is correct (CURRENTLY OFF)
+; 					while (verify_finished() eq 0) do begin
+; 						spawn,'./clumpy_mcmc'
+; 					endwhile
 				endif else begin
 					res = dialog_message('BayesCLUMPY executable is not present.'+string(10B)+$
 						'Compile the code and try again',/error)
