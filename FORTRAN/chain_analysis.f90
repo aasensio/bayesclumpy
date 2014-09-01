@@ -727,7 +727,6 @@ contains
 		do i = 1, chain_analysis%nlength
 			pars = chain_analysis%chain(1:9,i)
 
-! Points obtained with new filter
  			if (what_to_do > 0) then
 				call neural_eval(pars, neural%SED_highres, prior%include_agn, prior%reddening_law)
 				neural%SED_highres = neural%SED_highres / 1.e10 * 10.d0**pars(7)
@@ -739,23 +738,55 @@ contains
 			endif
 			
 		enddo
-
-! Save file with evaluated SEDs at the posterior samples without the AGN
+		
+! Save file with evaluated SEDs at the posterior samples without extinction
 		do i = 1, chain_analysis%nlength
 			pars = chain_analysis%chain(1:9,i)
 
-! Points obtained with new filter
  			if (what_to_do > 0) then
-				call neural_eval(pars, neural%SED_highres, 0*prior%include_agn, prior%reddening_law)
+				call neural_eval(pars, neural%SED_highres, prior%include_agn, 0)
 				neural%SED_highres = neural%SED_highres / 1.e10 * 10.d0**pars(7)
 				write(12) neural%SED_highres
 			else
-				call lininterpol_eval(pars, database%SED_highres, 0*prior%include_agn, prior%reddening_law)
+				call lininterpol_eval(pars, database%SED_highres, prior%include_agn, 0)
 				database%SED_highres = database%SED_highres / 1.e10 * 10.d0**pars(7)
 				write(12) database%SED_highres
 			endif
 			
 		enddo
+
+! Save file with evaluated SEDs at the posterior samples without the AGN
+		do i = 1, chain_analysis%nlength
+			pars = chain_analysis%chain(1:9,i)
+
+ 			if (what_to_do > 0) then
+				call neural_eval(pars, neural%SED_highres, 0, prior%reddening_law)
+				neural%SED_highres = neural%SED_highres / 1.e10 * 10.d0**pars(7)
+				write(12) neural%SED_highres
+			else
+				call lininterpol_eval(pars, database%SED_highres, 0, prior%reddening_law)
+				database%SED_highres = database%SED_highres / 1.e10 * 10.d0**pars(7)
+				write(12) database%SED_highres
+			endif
+			
+		enddo
+		
+! Save file with evaluated SEDs at the posterior samples without AGN and without extinction
+		do i = 1, chain_analysis%nlength
+			pars = chain_analysis%chain(1:9,i)
+
+ 			if (what_to_do > 0) then
+				call neural_eval(pars, neural%SED_highres, 0, 0)
+				neural%SED_highres = neural%SED_highres / 1.e10 * 10.d0**pars(7)
+				write(12) neural%SED_highres
+			else
+				call lininterpol_eval(pars, database%SED_highres, 0, 0)
+				database%SED_highres = database%SED_highres / 1.e10 * 10.d0**pars(7)
+				write(12) database%SED_highres
+			endif
+			
+		enddo
+
 
 ! The SED for the value of the median parameters
 ! with and without extinction (if applied, of course).
