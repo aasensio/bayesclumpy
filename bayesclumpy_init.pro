@@ -34,7 +34,7 @@ function bayesclumpy_init, reset_state=reset_state
 
 	list_reddenings = ['No reddening','Allen (1976)','Seaton (1979) MW',$
 		'Fitzpatrick (1986) LMC',$
-		'Pr�vot et al. (1984) SMC','Calzetti et al. (2000) SB','Chiar & Tielens (2000)']
+		'Pr�vot et al. (1984) SMC','Calzetti et al. (2000) SB','Chiar & Tielens (2000)','Chiar & Tielens (2000) - GC']
 
  	symbo = findgen(17) * (!pi*2/16.)
 	usersym, cos(symbo), sin(symbo), /fill

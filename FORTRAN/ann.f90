@@ -138,6 +138,13 @@ contains
 				call lin_interpol(prior%lambda_pixie, prior%extinction_pixie, lambda, extinction_curve)
 ! A_K = A_V * 0.09, from Whittet (2003)
 				extinction_curve = extinction_curve * 0.09d0 * Av
+				
+! Chiar & Tielens (2006) extinction curve - galactic center
+			case(7)
+				call lin_interpol(prior%lambda_pixie, prior%extinction_pixie, lambda, extinction_curve)
+! A_K = A_V * 0.09, from Whittet (2003)
+				extinction_curve = extinction_curve * 0.09d0 * Av
+
 		end select
 		
 		extinction_curve = 10.0**(-0.4*extinction_curve)

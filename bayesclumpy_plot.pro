@@ -116,6 +116,22 @@ function extinction, lambda, model, Av
 				if (count ne 0) then A_lambda[ind] = 0.d0
 				return, 10.d0^(-0.4*A_lambda)
 			 end
+; Chiar & Tielens (2000) - galactic center
+		7 : begin
+				openr,2,'FILTERS/extinction_chiar_tielens2006.dat'
+				temp = ''
+				for i = 0, 13 do readf,2,temp
+				temp = fltarr(3,258)
+				readf,2,temp
+				close,2
+				lambda_pixie = reform(temp[0,*])
+				extinction_pixie = reform(temp[1,*])
+				ext = interpol(extinction_pixie, lambda_pixie, lambda)
+				A_lambda = ext * 0.09d0 * Av
+				ind = where(lambda gt 30.d0, count)
+				if (count ne 0) then A_lambda[ind] = 0.d0
+				return, 10.d0^(-0.4*A_lambda)
+			 end
 	endcase
 end
 

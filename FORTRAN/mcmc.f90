@@ -290,6 +290,19 @@ contains
 			close(14)			
 		endif
 		
+! Read Chiar & Tielens law if used - galactic center
+		if (prior%reddening_law == 7) then
+			write(*,*) 'Reading Chiar & Tielens extinction curve'
+			open(unit=14,file='FILTERS/extinction_chiar_tielens2006.dat',action='read',status='old')
+			call lb(14, 14)
+			allocate(prior%lambda_pixie(258), prior%extinction_pixie(258))
+			do i = 1, 258
+				read(14,*) prior%lambda_pixie(i), prior%extinction_pixie(i), temp
+			enddo
+			close(14)			
+		endif
+
+		
 		allocate(ranges_from(nparam))
 		allocate(ranges_to(nparam))
 		allocate(typ(nparam))
