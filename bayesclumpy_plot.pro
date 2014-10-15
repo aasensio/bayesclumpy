@@ -501,7 +501,7 @@ pro plot_models, file, param_names, neural, est, errup, errdown, best, state, pr
 		close,2
 	endelse
 	
-	read_sed_samples, file, lambda, seds, seds_noAGN=seds_noAGN, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
+	read_sed_samples, file, lambda, seds, sedsnoAGN=sedsnoAGN, SED_median=SED_median, SED_noextinction_median=SED_noextinction_median,$
 		SED_noagn_median=SED_noagn_median, SED_noagn_noextinction_median=SED_noagn_noextinction_median,$
 		SED_MAP=SED_MAP, SED_noextinction_MAP=SED_noextinction_MAP,$
 		SED_noagn_MAP=SED_noagn_MAP, SED_noagn_noextinction_MAP=SED_noagn_noextinction_MAP,$
