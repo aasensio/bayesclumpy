@@ -125,7 +125,7 @@ function bayesclumpy_init, reset_state=reset_state
 ; tauv
 	tauvBase = widget_base(set2paramBase, /COLUMN, FRAME=1, TITLE='tauv')
 	tauvSlider = cw_fslider(tauvBase,TITLE='tauv',UVALUE='tauvSynthSlider',$
-	 	  XSIZE=150,MINIMUM=5,MAXIMUM=150,VALUE=state.synth[4], /EDIT)
+	 	  XSIZE=300,MINIMUM=5,MAXIMUM=150,VALUE=state.synth[4], /EDIT)
 	 	  
 ; angle
 	angleBase = widget_base(set2paramBase, /COLUMN, FRAME=1, TITLE='angle')
@@ -367,9 +367,9 @@ function bayesclumpy_init, reset_state=reset_state
 ; tauv
 	tauvBase = widget_base(horizparamBase, /COLUMN, FRAME=1, TITLE='Sigma')
 	tauvminSlider = widget_slider(tauvBase,TITLE='tauv [min]',UVALUE='tauvminSlider',$
-	 	  XSIZE=slider_xsize,MINIMUM=5,MAXIMUM=150,VALUE=state.ranges_from[4])
+	 	  XSIZE=slider_xsize,MINIMUM=5,MAXIMUM=300,VALUE=state.ranges_from[4])
 	tauvmaxSlider = widget_slider(tauvBase,TITLE='tauv [max]',UVALUE='tauvmaxSlider',$
-	 	  XSIZE=slider_xsize,MINIMUM=5,MAXIMUM=150,VALUE=state.ranges_to[4])
+	 	  XSIZE=slider_xsize,MINIMUM=5,MAXIMUM=300,VALUE=state.ranges_to[4])
 	priorBase = widget_base(tauvBase, /COLUMN, /EXCLUSIVE)
 	uniformButton = widget_button(priorBase, VALUE='Uniform', UVALUE='UNIFORM_tauv')
 	gaussianButton = widget_button(priorBase, VALUE='Gaussian', UVALUE='GAUSSIAN_tauv')
